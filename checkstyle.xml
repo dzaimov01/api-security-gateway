@@ -5,8 +5,6 @@
 <module name="Checker">
   <module name="TreeWalker">
     <module name="NeedBraces"/>
-    <module name="FinalParameters"/>
     <module name="WhitespaceAfter"/>
-    <module name="WhitespaceAround"/>
   </module>
 </module>
