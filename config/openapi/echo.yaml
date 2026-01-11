@@ -1,0 +1,21 @@
+openapi: 3.0.3
+info:
+  title: Echo API
+  version: 1.0.0
+paths:
+  /echo:
+    post:
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                message:
+                  type: string
+              required:
+                - message
+      responses:
+        '200':
+          description: OK
