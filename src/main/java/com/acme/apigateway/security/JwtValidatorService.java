@@ -26,8 +26,10 @@ public class JwtValidatorService implements JwtTokenValidator {
       NimbusReactiveJwtDecoder decoder = NimbusReactiveJwtDecoder.withJwkSetUri(jwt.jwksUri()).build();
       decoder.setJwtValidator(buildValidator(jwt.issuer(), jwt.audience()));
       this.decoder = decoder;
-    } else {
+    } else if (jwt.issuer() != null && !jwt.issuer().isBlank()) {
       this.decoder = ReactiveJwtDecoders.fromIssuerLocation(jwt.issuer());
+    } else {
+      this.decoder = token -> Mono.error(new IllegalStateException("JWT issuer or JWKS URI must be configured"));
     }
   }
 

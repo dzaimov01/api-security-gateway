@@ -8,7 +8,7 @@ docker compose up --build
 
 - Gateway: `http://localhost:8080`
 - Echo service: `http://localhost:9000`
-- Postgres: `localhost:5432`
+- Postgres: internal to the Docker network (add a host port mapping if you need direct access)
 - Redis: `localhost:6379`
 
 ## Production Notes

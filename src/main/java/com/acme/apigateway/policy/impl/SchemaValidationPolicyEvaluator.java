@@ -50,12 +50,20 @@ public class SchemaValidationPolicyEvaluator implements PolicyEvaluator {
     String body = context.requestBody() == null ? "" : new String(context.requestBody(), StandardCharsets.UTF_8);
 
     String method = context.request().getMethod() == null ? "GET" : context.request().getMethod().name();
-    Request request = SimpleRequest.Builder
-        .create(method, context.request().getPath().value())
-        .withBody(body)
-        .withContentType(contentType)
-        .withHeaders(context.request().getHeaders().toSingleValueMap())
-        .build();
+    SimpleRequest.Builder builder = switch (method) {
+      case "GET" -> SimpleRequest.Builder.get(context.request().getPath().value());
+      case "POST" -> SimpleRequest.Builder.post(context.request().getPath().value());
+      case "PUT" -> SimpleRequest.Builder.put(context.request().getPath().value());
+      case "DELETE" -> SimpleRequest.Builder.delete(context.request().getPath().value());
+      case "PATCH" -> SimpleRequest.Builder.patch(context.request().getPath().value());
+      case "HEAD" -> SimpleRequest.Builder.head(context.request().getPath().value());
+      case "OPTIONS" -> SimpleRequest.Builder.options(context.request().getPath().value());
+      case "TRACE" -> SimpleRequest.Builder.trace(context.request().getPath().value());
+      default -> new SimpleRequest.Builder(method, context.request().getPath().value());
+    };
+    builder.withBody(body).withContentType(contentType);
+    context.request().getHeaders().toSingleValueMap().forEach(builder::withHeader);
+    Request request = builder.build();
 
     var report = validator.validateRequest(request);
     if (report.hasErrors()) {

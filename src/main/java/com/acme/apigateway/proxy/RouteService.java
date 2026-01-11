@@ -29,7 +29,12 @@ public class RouteService {
 
   @Scheduled(fixedDelayString = "${gateway.route-refresh-interval:PT30S}")
   public void refreshRoutes() {
-    routeRepository.findAllByEnabledTrue()
+    var source = routeRepository.findAllByEnabledTrue();
+    if (source == null) {
+      cache.clear();
+      return;
+    }
+    source
         .map(this::toDefinition)
         .collectList()
         .doOnNext(routes -> {
@@ -43,7 +48,11 @@ public class RouteService {
 
   public Flux<RouteDefinition> listRoutes() {
     if (cache.isEmpty()) {
-      return routeRepository.findAllByEnabledTrue().map(this::toDefinition);
+      var source = routeRepository.findAllByEnabledTrue();
+      if (source == null) {
+        return Flux.empty();
+      }
+      return source.map(this::toDefinition);
     }
     return Flux.fromIterable(cache.values());
   }

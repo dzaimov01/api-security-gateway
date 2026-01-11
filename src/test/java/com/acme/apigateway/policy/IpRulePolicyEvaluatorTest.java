@@ -20,7 +20,9 @@ class IpRulePolicyEvaluatorTest {
     IpRulePolicyEvaluator evaluator = new IpRulePolicyEvaluator(provider);
 
     PolicyEntity policy = new PolicyEntity(UUID.randomUUID(), "ip", "ip_rule", "{}", true, Instant.now());
-    PolicyContext context = new PolicyContext(UUID.randomUUID(), "10.0.0.10", "", null,
+    com.acme.apigateway.proxy.RouteDefinition route = new com.acme.apigateway.proxy.RouteDefinition(
+        UUID.randomUUID(), "test", "/test", "http://localhost", java.util.List.of("GET"));
+    PolicyContext context = new PolicyContext(UUID.randomUUID(), "10.0.0.10", "", route,
         new org.springframework.http.server.reactive.ServerHttpRequestDecorator(
             org.springframework.mock.http.server.reactive.MockServerHttpRequest.get("/test").build()) {},
         new byte[0]);

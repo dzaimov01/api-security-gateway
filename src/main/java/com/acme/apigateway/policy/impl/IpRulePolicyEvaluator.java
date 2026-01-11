@@ -26,6 +26,9 @@ public class IpRulePolicyEvaluator implements PolicyEvaluator {
 
   @Override
   public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+    if (context.route() == null) {
+      return Mono.just(PolicyDecision.allow(handlesType()));
+    }
     return ipRuleService.rulesForRoute(context.route().id())
         .map(rules -> {
           for (IpRule rule : rules) {

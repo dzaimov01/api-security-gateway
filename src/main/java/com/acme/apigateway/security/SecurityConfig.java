@@ -60,7 +60,10 @@ public class SecurityConfig {
       decoder.setJwtValidator(buildValidator(jwt.issuer(), jwt.audience()));
       return decoder;
     }
-    return ReactiveJwtDecoders.fromIssuerLocation(jwt.issuer());
+    if (jwt.issuer() != null && !jwt.issuer().isBlank()) {
+      return ReactiveJwtDecoders.fromIssuerLocation(jwt.issuer());
+    }
+    return token -> Mono.error(new IllegalStateException("JWT issuer or JWKS URI must be configured"));
   }
 
   private OAuth2TokenValidator<Jwt> buildValidator(String issuer, List<String> audience) {

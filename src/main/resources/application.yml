@@ -46,7 +46,7 @@ gateway:
     default-capacity: 100
     default-refill-per-second: 5
   jwt:
-    issuer: ${JWT_ISSUER:https://issuer.example.com}
+    issuer: ${JWT_ISSUER:}
     audience:
       - ${JWT_AUDIENCE:api}
     jwks-uri: ${JWT_JWKS_URI:}

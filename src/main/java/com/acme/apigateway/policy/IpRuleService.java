@@ -35,9 +35,21 @@ public class IpRuleService implements IpRuleProvider {
 
   @Override
   public Mono<List<IpRule>> rulesForRoute(UUID routeId) {
-    return Mono.just(cached.stream()
-        .filter(rule -> rule.routeId() == null || rule.routeId().equals(routeId))
-        .toList());
+    if (!cached.isEmpty()) {
+      return Mono.just(cached.stream()
+          .filter(rule -> rule.routeId() == null || rule.routeId().equals(routeId))
+          .toList());
+    }
+    Flux<IpRuleEntity> source = ipRuleRepository.findAllByEnabledTrue();
+    if (source == null) {
+      return Mono.just(List.of());
+    }
+    return source.map(this::toRule)
+        .collectList()
+        .doOnNext(list -> cached = list)
+        .map(list -> list.stream()
+            .filter(rule -> rule.routeId() == null || rule.routeId().equals(routeId))
+            .toList());
   }
 
   private IpRule toRule(IpRuleEntity entity) {
