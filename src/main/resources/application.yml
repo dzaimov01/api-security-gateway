@@ -1,0 +1,87 @@
+spring:
+  application:
+    name: api-security-gateway
+  r2dbc:
+    url: r2dbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:gateway}
+    username: ${DB_USER:gateway}
+    password: ${DB_PASSWORD:gateway}
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:gateway}
+    username: ${DB_USER:gateway}
+    password: ${DB_PASSWORD:gateway}
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+
+server:
+  port: ${SERVER_PORT:8080}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+
+springdoc:
+  api-docs:
+    path: /admin/openapi
+  swagger-ui:
+    path: /admin/swagger-ui
+
+logging:
+  level:
+    root: INFO
+
+gateway:
+  instance-name: gateway-local
+  route-refresh-interval: PT30S
+  audit:
+    enabled: true
+  rate-limit:
+    storage: ${RATE_LIMIT_STORAGE:memory}
+    default-window: PT60S
+    default-capacity: 100
+    default-refill-per-second: 5
+  jwt:
+    issuer: ${JWT_ISSUER:https://issuer.example.com}
+    audience:
+      - ${JWT_AUDIENCE:api}
+    jwks-uri: ${JWT_JWKS_URI:}
+  proxy:
+    connect-timeout: PT2S
+    response-timeout: PT10S
+    hop-by-hop-headers:
+      - connection
+      - keep-alive
+      - proxy-authenticate
+      - proxy-authorization
+      - te
+      - trailer
+      - transfer-encoding
+      - upgrade
+  schema-validation:
+    enabled: true
+    open-api-base-path: ${OPENAPI_BASE_PATH:./config/openapi}
+  waf:
+    max-header-bytes: 8192
+    max-body-bytes: 262144
+    blocked-methods:
+      - TRACE
+      - TRACK
+      - CONNECT
+    sql-injection-patterns:
+      - "select * from"
+      - "union select"
+      - " or 1=1"
+      - "--"
+    xss-patterns:
+      - "<script"
+      - "onerror="
+      - "onload="
+    path-traversal-tokens:
+      - "../"
+      - "..%2f"
+      - "%2e%2e/"
