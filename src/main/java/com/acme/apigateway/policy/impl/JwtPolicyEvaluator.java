@@ -13,7 +13,7 @@ import reactor.core.publisher.Mono;
 public class JwtPolicyEvaluator implements PolicyEvaluator {
   private final JwtTokenValidator jwtValidatorService;
 
-  public JwtPolicyEvaluator(JwtTokenValidator jwtValidatorService) {
+  public JwtPolicyEvaluator(final JwtTokenValidator jwtValidatorService) {
     this.jwtValidatorService = jwtValidatorService;
   }
 
@@ -23,7 +23,7 @@ public class JwtPolicyEvaluator implements PolicyEvaluator {
   }
 
   @Override
-  public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final PolicyEntity policy, final PolicyContext context) {
     String authHeader = context.request().getHeaders().getFirst("Authorization");
     if (authHeader == null || !authHeader.startsWith("Bearer ")) {
       return Mono.just(PolicyDecision.deny(handlesType(), "missing_bearer_token", Map.of("status", 401)));

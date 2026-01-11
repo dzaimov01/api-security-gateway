@@ -22,9 +22,9 @@ public class SchemaValidationPolicyEvaluator implements PolicyEvaluator {
   private final PolicyConfigParser parser;
   private final GatewayProperties properties;
 
-  public SchemaValidationPolicyEvaluator(SchemaValidationService validationService,
-      PolicyConfigParser parser,
-      GatewayProperties properties) {
+  public SchemaValidationPolicyEvaluator(final SchemaValidationService validationService,
+      final PolicyConfigParser parser,
+      final GatewayProperties properties) {
     this.validationService = validationService;
     this.parser = parser;
     this.properties = properties;
@@ -36,7 +36,7 @@ public class SchemaValidationPolicyEvaluator implements PolicyEvaluator {
   }
 
   @Override
-  public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final PolicyEntity policy, final PolicyContext context) {
     if (!properties.schemaValidation().enabled()) {
       return Mono.just(PolicyDecision.allow(handlesType()));
     }
@@ -73,5 +73,5 @@ public class SchemaValidationPolicyEvaluator implements PolicyEvaluator {
     return Mono.just(PolicyDecision.allow(handlesType()));
   }
 
-  public record SchemaValidationConfig(String openApiSpec) {}
+  public record SchemaValidationConfig(String openApiSpec) { }
 }

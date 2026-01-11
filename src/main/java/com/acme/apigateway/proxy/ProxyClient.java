@@ -22,7 +22,7 @@ public class ProxyClient {
   private final WebClient client;
   private final Set<String> hopByHopHeaders;
 
-  public ProxyClient(GatewayProperties properties) {
+  public ProxyClient(final GatewayProperties properties) {
     GatewayProperties.ProxyProperties proxy = properties.proxy();
     ConnectionProvider provider = ConnectionProvider.builder("gateway-proxy")
         .maxConnections(500)
@@ -37,7 +37,8 @@ public class ProxyClient {
     this.hopByHopHeaders = new HashSet<>(proxy.hopByHopHeaders());
   }
 
-  public Mono<Void> forward(ServerWebExchange exchange, RouteDefinition route, byte[] cachedBody) {
+  public Mono<Void> forward(final ServerWebExchange exchange, final RouteDefinition route,
+      final byte[] cachedBody) {
     URI upstream = buildUpstreamUri(exchange, route);
     HttpMethod method = exchange.getRequest().getMethod();
     WebClient.RequestBodySpec requestSpec = client.method(method).uri(upstream);
@@ -65,7 +66,7 @@ public class ProxyClient {
     });
   }
 
-  private URI buildUpstreamUri(ServerWebExchange exchange, RouteDefinition route) {
+  private URI buildUpstreamUri(final ServerWebExchange exchange, final RouteDefinition route) {
     String base = route.upstreamUrl();
     String path = exchange.getRequest().getURI().getRawPath();
     String query = exchange.getRequest().getURI().getRawQuery();

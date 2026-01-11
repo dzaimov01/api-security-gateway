@@ -22,7 +22,7 @@ import reactor.core.publisher.Mono;
 public class AdminController {
   private final AdminService adminService;
 
-  public AdminController(AdminService adminService) {
+  public AdminController(final AdminService adminService) {
     this.adminService = adminService;
   }
 
@@ -33,18 +33,18 @@ public class AdminController {
 
   @PostMapping("/routes")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<RouteEntity> createRoute(@Valid @RequestBody RouteRequest request) {
+  public Mono<RouteEntity> createRoute(@Valid @RequestBody final RouteRequest request) {
     return adminService.createRoute(request);
   }
 
   @PutMapping("/routes/{id}")
-  public Mono<RouteEntity> updateRoute(@PathVariable UUID id, @Valid @RequestBody RouteRequest request) {
+  public Mono<RouteEntity> updateRoute(@PathVariable final UUID id, @Valid @RequestBody final RouteRequest request) {
     return adminService.updateRoute(id, request);
   }
 
   @DeleteMapping("/routes/{id}")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> deleteRoute(@PathVariable UUID id) {
+  public Mono<Void> deleteRoute(@PathVariable final UUID id) {
     return adminService.deleteRoute(id);
   }
 
@@ -55,18 +55,18 @@ public class AdminController {
 
   @PostMapping("/policies")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<PolicyEntity> createPolicy(@Valid @RequestBody PolicyRequest request) {
+  public Mono<PolicyEntity> createPolicy(@Valid @RequestBody final PolicyRequest request) {
     return adminService.createPolicy(request);
   }
 
   @GetMapping("/routes/{id}/assignments")
-  public Flux<PolicyAssignmentEntity> listAssignments(@PathVariable UUID id) {
+  public Flux<PolicyAssignmentEntity> listAssignments(@PathVariable final UUID id) {
     return adminService.listAssignments(id);
   }
 
   @PostMapping("/routes/{id}/assignments")
   @ResponseStatus(HttpStatus.NO_CONTENT)
-  public Mono<Void> assignPolicies(@PathVariable UUID id, @Valid @RequestBody AssignmentRequest request) {
+  public Mono<Void> assignPolicies(@PathVariable final UUID id, @Valid @RequestBody final AssignmentRequest request) {
     return adminService.assignPolicies(id, request);
   }
 
@@ -77,7 +77,7 @@ public class AdminController {
 
   @PostMapping("/ip-rules")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<IpRuleEntity> createIpRule(@Valid @RequestBody IpRuleRequest request) {
+  public Mono<IpRuleEntity> createIpRule(@Valid @RequestBody final IpRuleRequest request) {
     return adminService.createIpRule(request);
   }
 
@@ -88,7 +88,7 @@ public class AdminController {
 
   @PostMapping("/api-clients")
   @ResponseStatus(HttpStatus.CREATED)
-  public Mono<ApiClientEntity> createApiClient(@Valid @RequestBody ApiClientRequest request) {
+  public Mono<ApiClientEntity> createApiClient(@Valid @RequestBody final ApiClientRequest request) {
     return adminService.createApiClient(request);
   }
 }

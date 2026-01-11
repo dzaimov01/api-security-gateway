@@ -8,4 +8,4 @@ public record RouteDefinition(
     String name,
     String pathPattern,
     String upstreamUrl,
-    List<String> methods) {}
+    List<String> methods) { }

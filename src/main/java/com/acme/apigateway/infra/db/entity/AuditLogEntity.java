@@ -14,4 +14,4 @@ public record AuditLogEntity(
     String routePattern,
     String decision,
     String detailsJson,
-    Instant createdAt) {}
+    Instant createdAt) { }

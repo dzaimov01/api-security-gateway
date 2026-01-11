@@ -15,7 +15,7 @@ import reactor.core.publisher.Mono;
 public class IpRulePolicyEvaluator implements PolicyEvaluator {
   private final IpRuleProvider ipRuleService;
 
-  public IpRulePolicyEvaluator(IpRuleProvider ipRuleService) {
+  public IpRulePolicyEvaluator(final IpRuleProvider ipRuleService) {
     this.ipRuleService = ipRuleService;
   }
 
@@ -25,7 +25,7 @@ public class IpRulePolicyEvaluator implements PolicyEvaluator {
   }
 
   @Override
-  public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final PolicyEntity policy, final PolicyContext context) {
     if (context.route() == null) {
       return Mono.just(PolicyDecision.allow(handlesType()));
     }
@@ -45,7 +45,7 @@ public class IpRulePolicyEvaluator implements PolicyEvaluator {
         });
   }
 
-  private boolean matches(IpRule rule, String clientIp) {
+  private boolean matches(final IpRule rule, final String clientIp) {
     try {
       return new IpCidrMatcher(rule.cidr()).matches(clientIp);
     } catch (IllegalArgumentException e) {

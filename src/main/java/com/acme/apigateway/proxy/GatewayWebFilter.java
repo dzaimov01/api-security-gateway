@@ -32,12 +32,12 @@ public class GatewayWebFilter implements WebFilter {
   private final AuditService auditService;
   private final ClientContextExtractor clientContextExtractor;
 
-  public GatewayWebFilter(RouteService routeService,
-      RouteMatcher routeMatcher,
-      ProxyClient proxyClient,
-      PolicyEngine policyEngine,
-      AuditService auditService,
-      ClientContextExtractor clientContextExtractor) {
+  public GatewayWebFilter(final RouteService routeService,
+      final RouteMatcher routeMatcher,
+      final ProxyClient proxyClient,
+      final PolicyEngine policyEngine,
+      final AuditService auditService,
+      final ClientContextExtractor clientContextExtractor) {
     this.routeService = routeService;
     this.routeMatcher = routeMatcher;
     this.proxyClient = proxyClient;
@@ -47,7 +47,7 @@ public class GatewayWebFilter implements WebFilter {
   }
 
   @Override
-  public Mono<Void> filter(ServerWebExchange exchange, WebFilterChain chain) {
+  public Mono<Void> filter(final ServerWebExchange exchange, final WebFilterChain chain) {
     String path = exchange.getRequest().getPath().value();
     if (path.startsWith("/admin") || path.startsWith("/actuator")) {
       return chain.filter(exchange);
@@ -70,22 +70,22 @@ public class GatewayWebFilter implements WebFilter {
     });
   }
 
-  private Mono<PolicyDecision> evaluatePolicies(ServerWebExchange exchange,
-      RouteDefinition route,
-      String clientIp,
-      String apiKey,
-      UUID requestId,
-      byte[] body) {
+  private Mono<PolicyDecision> evaluatePolicies(final ServerWebExchange exchange,
+      final RouteDefinition route,
+      final String clientIp,
+      final String apiKey,
+      final UUID requestId,
+      final byte[] body) {
     PolicyContext context = new PolicyContext(requestId, clientIp, apiKey, route, exchange.getRequest(), body);
     return policyEngine.evaluate(route.id(), context);
   }
 
-  private Mono<Void> handleDecision(ServerWebExchange exchange,
-      RouteDefinition route,
-      String clientIp,
-      UUID requestId,
-      PolicyDecision decision,
-      byte[] body) {
+  private Mono<Void> handleDecision(final ServerWebExchange exchange,
+      final RouteDefinition route,
+      final String clientIp,
+      final UUID requestId,
+      final PolicyDecision decision,
+      final byte[] body) {
     return auditService.recordDecision(requestId, clientIp, route, decision)
         .then(Mono.defer(() -> {
           if (!decision.allowed()) {
@@ -95,7 +95,7 @@ public class GatewayWebFilter implements WebFilter {
         }));
   }
 
-  private Mono<Void> deny(ServerWebExchange exchange, PolicyDecision decision) {
+  private Mono<Void> deny(final ServerWebExchange exchange, final PolicyDecision decision) {
     int status = decision.metadata().getOrDefault("status", HttpStatus.FORBIDDEN.value()) instanceof Integer
         ? (Integer) decision.metadata().getOrDefault("status", HttpStatus.FORBIDDEN.value())
         : HttpStatus.FORBIDDEN.value();
@@ -107,7 +107,7 @@ public class GatewayWebFilter implements WebFilter {
     return exchange.getResponse().writeWith(Mono.just(buffer));
   }
 
-  private Mono<byte[]> cacheBody(ServerWebExchange exchange) {
+  private Mono<byte[]> cacheBody(final ServerWebExchange exchange) {
     return DataBufferUtils.join(exchange.getRequest().getBody())
         .map(dataBuffer -> {
           byte[] bytes = new byte[dataBuffer.readableByteCount()];

@@ -7,7 +7,7 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ApiKeyHasher {
-  public String hash(String value) {
+  public String hash(final String value) {
     try {
       MessageDigest digest = MessageDigest.getInstance("SHA-256");
       byte[] hashed = digest.digest(value.getBytes(StandardCharsets.UTF_8));

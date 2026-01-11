@@ -19,7 +19,8 @@ public class RateLimitPolicyEvaluator implements PolicyEvaluator {
   private final RateLimiter rateLimiter;
   private final GatewayProperties properties;
 
-  public RateLimitPolicyEvaluator(PolicyConfigParser parser, List<RateLimiter> limiters, GatewayProperties properties) {
+  public RateLimitPolicyEvaluator(final PolicyConfigParser parser, final List<RateLimiter> limiters,
+      final GatewayProperties properties) {
     this.parser = parser;
     this.properties = properties;
     this.rateLimiter = limiters.stream()
@@ -34,7 +35,7 @@ public class RateLimitPolicyEvaluator implements PolicyEvaluator {
   }
 
   @Override
-  public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final PolicyEntity policy, final PolicyContext context) {
     RateLimitConfig config = parser.parse(policy.configJson(), RateLimitConfig.class);
     String key = buildKey(config.scope(), context);
     return rateLimiter.allow(key, normalize(config))
@@ -47,14 +48,14 @@ public class RateLimitPolicyEvaluator implements PolicyEvaluator {
         });
   }
 
-  private RateLimitConfig normalize(RateLimitConfig config) {
+  private RateLimitConfig normalize(final RateLimitConfig config) {
     int capacity = config.capacity() > 0 ? config.capacity() : properties.rateLimit().defaultCapacity();
     int refill = config.refillPerSecond() > 0 ? config.refillPerSecond() : properties.rateLimit().defaultRefillPerSecond();
     long window = config.windowSeconds() > 0 ? config.windowSeconds() : properties.rateLimit().defaultWindow().getSeconds();
     return new RateLimitConfig(config.scope(), capacity, refill, window);
   }
 
-  private String buildKey(String scope, PolicyContext context) {
+  private String buildKey(final String scope, final PolicyContext context) {
     String normalizedScope = scope == null ? "ip" : scope;
     return switch (normalizedScope) {
       case "api_key" -> "api:" + context.apiKey();

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Service;
 public class SchemaValidationService {
   private final Map<String, OpenApiInteractionValidator> cache = new ConcurrentHashMap<>();
 
-  public OpenApiInteractionValidator load(String specPath) {
+  public OpenApiInteractionValidator load(final String specPath) {
     return cache.computeIfAbsent(specPath, path -> OpenApiInteractionValidator.createFor(path).build());
   }
 }

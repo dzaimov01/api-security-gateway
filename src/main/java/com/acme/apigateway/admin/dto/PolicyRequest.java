@@ -6,4 +6,4 @@ public record PolicyRequest(
     @NotBlank String name,
     @NotBlank String type,
     @NotBlank String configJson,
-    boolean enabled) {}
+    boolean enabled) { }

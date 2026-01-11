@@ -23,13 +23,15 @@ public class AuditService {
   private final ObjectMapper objectMapper;
   private final GatewayProperties properties;
 
-  public AuditService(AuditLogRepository auditLogRepository, ObjectMapper objectMapper, GatewayProperties properties) {
+  public AuditService(final AuditLogRepository auditLogRepository, final ObjectMapper objectMapper,
+      final GatewayProperties properties) {
     this.auditLogRepository = auditLogRepository;
     this.objectMapper = objectMapper;
     this.properties = properties;
   }
 
-  public Mono<Void> recordDecision(UUID requestId, String clientIp, RouteDefinition route, PolicyDecision decision) {
+  public Mono<Void> recordDecision(final UUID requestId, final String clientIp, final RouteDefinition route,
+      final PolicyDecision decision) {
     if (!properties.audit().enabled()) {
       return Mono.empty();
     }
@@ -50,7 +52,7 @@ public class AuditService {
     return auditLogRepository.save(entity).then();
   }
 
-  private String toJson(Map<String, Object> metadata) {
+  private String toJson(final Map<String, Object> metadata) {
     try {
       return objectMapper.writeValueAsString(metadata == null ? Map.of() : metadata);
     } catch (JsonProcessingException e) {

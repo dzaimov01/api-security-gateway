@@ -19,7 +19,7 @@ public record GatewayProperties(
       String storage,
       Duration defaultWindow,
       int defaultCapacity,
-      int defaultRefillPerSecond) {}
+      int defaultRefillPerSecond) { }
 
   public record WafProperties(
       int maxHeaderBytes,
@@ -27,22 +27,22 @@ public record GatewayProperties(
       List<String> blockedMethods,
       List<String> sqlInjectionPatterns,
       List<String> xssPatterns,
-      List<String> pathTraversalTokens) {}
+      List<String> pathTraversalTokens) { }
 
   public record SchemaValidationProperties(
       boolean enabled,
-      String openApiBasePath) {}
+      String openApiBasePath) { }
 
   public record ProxyProperties(
       Duration connectTimeout,
       Duration responseTimeout,
-      List<String> hopByHopHeaders) {}
+      List<String> hopByHopHeaders) { }
 
   public record JwtProperties(
       String issuer,
       List<String> audience,
-      String jwksUri) {}
+      String jwksUri) { }
 
   public record AuditProperties(
-      boolean enabled) {}
+      boolean enabled) { }
 }

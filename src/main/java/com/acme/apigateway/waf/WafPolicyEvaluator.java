@@ -17,7 +17,7 @@ import reactor.core.publisher.Mono;
 public class WafPolicyEvaluator implements PolicyEvaluator {
   private final GatewayProperties properties;
 
-  public WafPolicyEvaluator(GatewayProperties properties) {
+  public WafPolicyEvaluator(final GatewayProperties properties) {
     this.properties = properties;
   }
 
@@ -27,7 +27,7 @@ public class WafPolicyEvaluator implements PolicyEvaluator {
   }
 
   @Override
-  public Mono<PolicyDecision> evaluate(PolicyEntity policy, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final PolicyEntity policy, final PolicyContext context) {
     GatewayProperties.WafProperties waf = properties.waf();
     if (waf == null) {
       return Mono.just(PolicyDecision.allow(handlesType()));
@@ -65,13 +65,13 @@ public class WafPolicyEvaluator implements PolicyEvaluator {
     return Mono.just(PolicyDecision.allow(handlesType()));
   }
 
-  private int estimateHeaderSize(HttpHeaders headers) {
+  private int estimateHeaderSize(final HttpHeaders headers) {
     return headers.entrySet().stream()
         .mapToInt(entry -> entry.getKey().length() + entry.getValue().toString().length())
         .sum();
   }
 
-  private boolean containsAny(String source, List<String> patterns) {
+  private boolean containsAny(final String source, final List<String> patterns) {
     return patterns.stream().anyMatch(pattern -> source.contains(pattern.toLowerCase(Locale.ROOT)));
   }
 }

@@ -19,7 +19,7 @@ public class RouteService {
   private final RouteRepository routeRepository;
   private final Map<UUID, RouteDefinition> cache = new ConcurrentHashMap<>();
 
-  public RouteService(RouteRepository routeRepository, GatewayProperties properties) {
+  public RouteService(final RouteRepository routeRepository, final GatewayProperties properties) {
     this.routeRepository = routeRepository;
     Duration refresh = properties.routeRefreshInterval();
     if (refresh == null || refresh.isZero()) {
@@ -57,7 +57,7 @@ public class RouteService {
     return Flux.fromIterable(cache.values());
   }
 
-  public Mono<RouteDefinition> getRoute(UUID id) {
+  public Mono<RouteDefinition> getRoute(final UUID id) {
     RouteDefinition cached = cache.get(id);
     if (cached != null) {
       return Mono.just(cached);
@@ -65,7 +65,7 @@ public class RouteService {
     return routeRepository.findById(id).map(this::toDefinition);
   }
 
-  private RouteDefinition toDefinition(RouteEntity entity) {
+  private RouteDefinition toDefinition(final RouteEntity entity) {
     List<String> methods = entity.methods() == null ? List.of()
         : Arrays.stream(entity.methods().split(","))
             .map(String::trim)

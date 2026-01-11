@@ -12,12 +12,12 @@ import reactor.core.publisher.Mono;
 public class RedisRateLimiter implements RateLimiter {
   private final ReactiveStringRedisTemplate redisTemplate;
 
-  public RedisRateLimiter(ReactiveStringRedisTemplate redisTemplate) {
+  public RedisRateLimiter(final ReactiveStringRedisTemplate redisTemplate) {
     this.redisTemplate = redisTemplate;
   }
 
   @Override
-  public Mono<RateLimitResult> allow(String key, RateLimitConfig config) {
+  public Mono<RateLimitResult> allow(final String key, final RateLimitConfig config) {
     String redisKey = "rate:" + key;
     Duration window = config.window();
     return redisTemplate.opsForValue().increment(redisKey)

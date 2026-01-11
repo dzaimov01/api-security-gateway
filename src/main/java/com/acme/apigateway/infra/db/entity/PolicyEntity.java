@@ -12,4 +12,4 @@ public record PolicyEntity(
     String type,
     String configJson,
     boolean enabled,
-    Instant createdAt) {}
+    Instant createdAt) { }

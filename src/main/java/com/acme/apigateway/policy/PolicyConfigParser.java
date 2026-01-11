@@ -7,11 +7,11 @@ import org.springframework.stereotype.Component;
 public class PolicyConfigParser {
   private final ObjectMapper objectMapper;
 
-  public PolicyConfigParser(ObjectMapper objectMapper) {
+  public PolicyConfigParser(final ObjectMapper objectMapper) {
     this.objectMapper = objectMapper;
   }
 
-  public <T> T parse(String json, Class<T> type) {
+  public <T> T parse(final String json, final Class<T> type) {
     try {
       return objectMapper.readValue(json, type);
     } catch (Exception e) {

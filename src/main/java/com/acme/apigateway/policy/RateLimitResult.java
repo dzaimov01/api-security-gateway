@@ -1,7 +1,7 @@
 package com.acme.apigateway.policy;
 
 public record RateLimitResult(boolean allowed, int remaining) {
-  public static RateLimitResult allowed(int remaining) {
+  public static RateLimitResult allowed(final int remaining) {
     return new RateLimitResult(true, remaining);
   }
 

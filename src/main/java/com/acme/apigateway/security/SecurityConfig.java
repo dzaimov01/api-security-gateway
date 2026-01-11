@@ -27,8 +27,8 @@ public class SecurityConfig {
 
   @Bean
   @Order(1)
-  public SecurityWebFilterChain adminSecurityFilterChain(ServerHttpSecurity http,
-      ReactiveJwtDecoder adminJwtDecoder) {
+  public SecurityWebFilterChain adminSecurityFilterChain(final ServerHttpSecurity http,
+      final ReactiveJwtDecoder adminJwtDecoder) {
     return http
         .securityMatcher(ServerWebExchangeMatchers.pathMatchers("/admin/**"))
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
@@ -41,7 +41,7 @@ public class SecurityConfig {
 
   @Bean
   @Order(2)
-  public SecurityWebFilterChain defaultSecurityFilterChain(ServerHttpSecurity http) {
+  public SecurityWebFilterChain defaultSecurityFilterChain(final ServerHttpSecurity http) {
     return http
         .csrf(ServerHttpSecurity.CsrfSpec::disable)
         .authorizeExchange(exchanges -> exchanges
@@ -53,7 +53,7 @@ public class SecurityConfig {
   }
 
   @Bean
-  public ReactiveJwtDecoder adminJwtDecoder(GatewayProperties properties) {
+  public ReactiveJwtDecoder adminJwtDecoder(final GatewayProperties properties) {
     GatewayProperties.JwtProperties jwt = properties.jwt();
     if (jwt.jwksUri() != null && !jwt.jwksUri().isBlank()) {
       NimbusReactiveJwtDecoder decoder = NimbusReactiveJwtDecoder.withJwkSetUri(jwt.jwksUri()).build();
@@ -66,7 +66,7 @@ public class SecurityConfig {
     return token -> Mono.error(new IllegalStateException("JWT issuer or JWKS URI must be configured"));
   }
 
-  private OAuth2TokenValidator<Jwt> buildValidator(String issuer, List<String> audience) {
+  private OAuth2TokenValidator<Jwt> buildValidator(final String issuer, final List<String> audience) {
     OAuth2TokenValidator<Jwt> issuerValidator = JwtValidators.createDefaultWithIssuer(issuer);
     OAuth2TokenValidator<Jwt> audienceValidator = token -> {
       if (audience == null || audience.isEmpty()) {

@@ -12,7 +12,8 @@ import org.springframework.web.util.pattern.PathPatternParser;
 public class RouteMatcher {
   private final PathPatternParser parser = new PathPatternParser();
 
-  public Optional<RouteDefinition> match(List<RouteDefinition> routes, String path, HttpMethod method) {
+  public Optional<RouteDefinition> match(final List<RouteDefinition> routes, final String path,
+      final HttpMethod method) {
     return routes.stream()
         .filter(route -> method == null || route.methods().isEmpty() || route.methods().contains(method.name()))
         .map(route -> new MatchCandidate(route, parser.parse(route.pathPattern())))
@@ -22,5 +23,5 @@ public class RouteMatcher {
         .findFirst();
   }
 
-  private record MatchCandidate(RouteDefinition route, PathPattern pattern) {}
+  private record MatchCandidate(RouteDefinition route, PathPattern pattern) { }
 }

@@ -13,4 +13,4 @@ public record IpRuleEntity(
     String action,
     UUID routeId,
     boolean enabled,
-    Instant createdAt) {}
+    Instant createdAt) { }

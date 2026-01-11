@@ -14,7 +14,7 @@ public class InMemoryRateLimiter implements RateLimiter {
   private final Map<String, TokenBucket> buckets = new ConcurrentHashMap<>();
 
   @Override
-  public Mono<RateLimitResult> allow(String key, RateLimitConfig config) {
+  public Mono<RateLimitResult> allow(final String key, final RateLimitConfig config) {
     TokenBucket bucket = buckets.computeIfAbsent(key, k -> new TokenBucket(config.capacity(), config.refillPerSecond()));
     synchronized (bucket) {
       bucket.refill();
@@ -37,7 +37,7 @@ public class InMemoryRateLimiter implements RateLimiter {
     private final int refillPerSecond;
     private Instant lastRefill;
 
-    private TokenBucket(int capacity, int refillPerSecond) {
+    private TokenBucket(final int capacity, final int refillPerSecond) {
       this.capacity = capacity;
       this.refillPerSecond = refillPerSecond;
       this.tokens = capacity;

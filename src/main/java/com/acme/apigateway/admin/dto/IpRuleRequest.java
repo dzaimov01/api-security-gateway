@@ -8,4 +8,4 @@ public record IpRuleRequest(
     @NotBlank String cidr,
     @NotBlank String action,
     UUID routeId,
-    boolean enabled) {}
+    boolean enabled) { }

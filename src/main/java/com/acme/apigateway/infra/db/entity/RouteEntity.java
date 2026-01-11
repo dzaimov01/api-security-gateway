@@ -13,4 +13,4 @@ public record RouteEntity(
     String upstreamUrl,
     String methods,
     boolean enabled,
-    Instant createdAt) {}
+    Instant createdAt) { }

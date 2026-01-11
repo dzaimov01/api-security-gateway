@@ -7,4 +7,4 @@ public record RouteRequest(
     @NotBlank String pathPattern,
     @NotBlank String upstreamUrl,
     String methods,
-    boolean enabled) {}
+    boolean enabled) { }

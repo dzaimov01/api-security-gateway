@@ -14,7 +14,7 @@ public class IpRuleService implements IpRuleProvider {
   private final IpRuleRepository ipRuleRepository;
   private volatile List<IpRule> cached = List.of();
 
-  public IpRuleService(IpRuleRepository ipRuleRepository) {
+  public IpRuleService(final IpRuleRepository ipRuleRepository) {
     this.ipRuleRepository = ipRuleRepository;
     refresh();
   }
@@ -34,7 +34,7 @@ public class IpRuleService implements IpRuleProvider {
   }
 
   @Override
-  public Mono<List<IpRule>> rulesForRoute(UUID routeId) {
+  public Mono<List<IpRule>> rulesForRoute(final UUID routeId) {
     if (!cached.isEmpty()) {
       return Mono.just(cached.stream()
           .filter(rule -> rule.routeId() == null || rule.routeId().equals(routeId))
@@ -52,7 +52,7 @@ public class IpRuleService implements IpRuleProvider {
             .toList());
   }
 
-  private IpRule toRule(IpRuleEntity entity) {
+  private IpRule toRule(final IpRuleEntity entity) {
     return new IpRule(entity.id(), entity.scope(), entity.cidr(), entity.action(), entity.routeId());
   }
 }

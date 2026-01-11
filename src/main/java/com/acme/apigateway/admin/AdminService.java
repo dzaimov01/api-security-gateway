@@ -31,12 +31,12 @@ public class AdminService {
   private final ApiClientRepository apiClientRepository;
   private final ApiKeyHasher apiKeyHasher;
 
-  public AdminService(RouteRepository routeRepository,
-      PolicyRepository policyRepository,
-      PolicyAssignmentRepository assignmentRepository,
-      IpRuleRepository ipRuleRepository,
-      ApiClientRepository apiClientRepository,
-      ApiKeyHasher apiKeyHasher) {
+  public AdminService(final RouteRepository routeRepository,
+      final PolicyRepository policyRepository,
+      final PolicyAssignmentRepository assignmentRepository,
+      final IpRuleRepository ipRuleRepository,
+      final ApiClientRepository apiClientRepository,
+      final ApiKeyHasher apiKeyHasher) {
     this.routeRepository = routeRepository;
     this.policyRepository = policyRepository;
     this.assignmentRepository = assignmentRepository;
@@ -49,19 +49,19 @@ public class AdminService {
     return routeRepository.findAll();
   }
 
-  public Mono<RouteEntity> createRoute(RouteRequest request) {
+  public Mono<RouteEntity> createRoute(final RouteRequest request) {
     RouteEntity entity = new RouteEntity(UUID.randomUUID(), request.name(), request.pathPattern(),
         request.upstreamUrl(), request.methods(), request.enabled(), Instant.now());
     return routeRepository.save(entity);
   }
 
-  public Mono<RouteEntity> updateRoute(UUID id, RouteRequest request) {
+  public Mono<RouteEntity> updateRoute(final UUID id, final RouteRequest request) {
     return routeRepository.findById(id)
         .flatMap(existing -> routeRepository.save(new RouteEntity(id, request.name(), request.pathPattern(),
             request.upstreamUrl(), request.methods(), request.enabled(), existing.createdAt())));
   }
 
-  public Mono<Void> deleteRoute(UUID id) {
+  public Mono<Void> deleteRoute(final UUID id) {
     return routeRepository.deleteById(id);
   }
 
@@ -69,17 +69,17 @@ public class AdminService {
     return policyRepository.findAll();
   }
 
-  public Mono<PolicyEntity> createPolicy(PolicyRequest request) {
+  public Mono<PolicyEntity> createPolicy(final PolicyRequest request) {
     PolicyEntity entity = new PolicyEntity(UUID.randomUUID(), request.name(), request.type(),
         request.configJson(), request.enabled(), Instant.now());
     return policyRepository.save(entity);
   }
 
-  public Flux<PolicyAssignmentEntity> listAssignments(UUID routeId) {
+  public Flux<PolicyAssignmentEntity> listAssignments(final UUID routeId) {
     return assignmentRepository.findAllByRouteIdAndEnabledTrueOrderByOrderIndex(routeId);
   }
 
-  public Mono<Void> assignPolicies(UUID routeId, AssignmentRequest request) {
+  public Mono<Void> assignPolicies(final UUID routeId, final AssignmentRequest request) {
     return assignmentRepository.findAllByRouteIdAndEnabledTrueOrderByOrderIndex(routeId)
         .flatMap(existing -> assignmentRepository.deleteById(existing.id()))
         .thenMany(Flux.fromIterable(request.assignments()))
@@ -92,7 +92,7 @@ public class AdminService {
     return ipRuleRepository.findAll();
   }
 
-  public Mono<IpRuleEntity> createIpRule(IpRuleRequest request) {
+  public Mono<IpRuleEntity> createIpRule(final IpRuleRequest request) {
     IpRuleEntity entity = new IpRuleEntity(UUID.randomUUID(), request.scope(), request.cidr(),
         request.action(), request.routeId(), request.enabled(), Instant.now());
     return ipRuleRepository.save(entity);
@@ -102,7 +102,7 @@ public class AdminService {
     return apiClientRepository.findAll();
   }
 
-  public Mono<ApiClientEntity> createApiClient(ApiClientRequest request) {
+  public Mono<ApiClientEntity> createApiClient(final ApiClientRequest request) {
     String hashed = apiKeyHasher.hash(request.apiKeyPlain());
     ApiClientEntity entity = new ApiClientEntity(UUID.randomUUID(), request.name(), hashed,
         request.active(), Instant.now());

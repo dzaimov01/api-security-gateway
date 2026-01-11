@@ -10,4 +10,4 @@ public record PolicyContext(
     String apiKey,
     RouteDefinition route,
     ServerHttpRequest request,
-    byte[] requestBody) {}
+    byte[] requestBody) { }

@@ -11,4 +11,4 @@ public record ApiClientEntity(
     String name,
     String apiKeyHash,
     boolean active,
-    Instant createdAt) {}
+    Instant createdAt) { }

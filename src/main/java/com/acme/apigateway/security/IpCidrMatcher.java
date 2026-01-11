@@ -8,7 +8,7 @@ public class IpCidrMatcher {
   private final BigInteger start;
   private final BigInteger end;
 
-  public IpCidrMatcher(String cidr) {
+  public IpCidrMatcher(final String cidr) {
     String[] parts = cidr.split("/");
     if (parts.length != 2) {
       throw new IllegalArgumentException("Invalid CIDR: " + cidr);
@@ -25,13 +25,13 @@ public class IpCidrMatcher {
     this.end = start.add(BigInteger.ONE.shiftLeft(totalBits - prefixLength).subtract(BigInteger.ONE));
   }
 
-  public boolean matches(String ip) {
+  public boolean matches(final String ip) {
     InetAddress address = parse(ip);
     BigInteger value = new BigInteger(1, address.getAddress());
     return value.compareTo(start) >= 0 && value.compareTo(end) <= 0;
   }
 
-  private InetAddress parse(String value) {
+  private InetAddress parse(final String value) {
     try {
       return InetAddress.getByName(value);
     } catch (UnknownHostException e) {

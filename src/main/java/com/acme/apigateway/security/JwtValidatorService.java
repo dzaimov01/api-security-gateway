@@ -19,7 +19,7 @@ public class JwtValidatorService implements JwtTokenValidator {
   private final ReactiveJwtDecoder decoder;
   private final List<String> audience;
 
-  public JwtValidatorService(GatewayProperties properties) {
+  public JwtValidatorService(final GatewayProperties properties) {
     GatewayProperties.JwtProperties jwt = properties.jwt();
     this.audience = jwt.audience();
     if (jwt.jwksUri() != null && !jwt.jwksUri().isBlank()) {
@@ -34,11 +34,11 @@ public class JwtValidatorService implements JwtTokenValidator {
   }
 
   @Override
-  public Mono<Jwt> decode(String token) {
+  public Mono<Jwt> decode(final String token) {
     return decoder.decode(token);
   }
 
-  private OAuth2TokenValidator<Jwt> buildValidator(String issuer, List<String> audience) {
+  private OAuth2TokenValidator<Jwt> buildValidator(final String issuer, final List<String> audience) {
     OAuth2TokenValidator<Jwt> issuerValidator = JwtValidators.createDefaultWithIssuer(issuer);
     OAuth2TokenValidator<Jwt> audienceValidator = jwt -> {
       if (audience == null || audience.isEmpty()) {

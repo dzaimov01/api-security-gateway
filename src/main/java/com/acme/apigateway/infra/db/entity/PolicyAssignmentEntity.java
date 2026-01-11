@@ -12,4 +12,4 @@ public record PolicyAssignmentEntity(
     UUID policyId,
     int orderIndex,
     boolean enabled,
-    Instant createdAt) {}
+    Instant createdAt) { }

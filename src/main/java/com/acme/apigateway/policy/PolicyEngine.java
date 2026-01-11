@@ -17,16 +17,16 @@ public class PolicyEngine {
   private final PolicyRepository policyRepository;
   private final Map<String, PolicyEvaluator> evaluators;
 
-  public PolicyEngine(PolicyAssignmentRepository assignmentRepository,
-      PolicyRepository policyRepository,
-      java.util.List<PolicyEvaluator> evaluators) {
+  public PolicyEngine(final PolicyAssignmentRepository assignmentRepository,
+      final PolicyRepository policyRepository,
+      final java.util.List<PolicyEvaluator> evaluators) {
     this.assignmentRepository = assignmentRepository;
     this.policyRepository = policyRepository;
     this.evaluators = evaluators.stream()
         .collect(Collectors.toMap(PolicyEvaluator::handlesType, Function.identity()));
   }
 
-  public Mono<PolicyDecision> evaluate(UUID routeId, PolicyContext context) {
+  public Mono<PolicyDecision> evaluate(final UUID routeId, final PolicyContext context) {
     return assignmentRepository.findAllByRouteIdAndEnabledTrueOrderByOrderIndex(routeId)
         .concatMap(assignment -> policyRepository.findById(assignment.policyId())
             .filter(PolicyEntity::enabled)
@@ -37,7 +37,7 @@ public class PolicyEngine {
         .defaultIfEmpty(PolicyDecision.allow("all_policies"));
   }
 
-  private Mono<PolicyDecision> evaluatePolicy(PolicyEntity policy, PolicyContext context) {
+  private Mono<PolicyDecision> evaluatePolicy(final PolicyEntity policy, final PolicyContext context) {
     PolicyEvaluator evaluator = evaluators.get(policy.type());
     if (evaluator == null) {
       return Mono.just(PolicyDecision.deny(policy.type(), "unsupported_policy", Map.of("policyId", policy.id().toString())));
