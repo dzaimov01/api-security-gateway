@@ -1,0 +1,214 @@
+openapi: 3.0.3
+info:
+  title: API Security Gateway Admin API
+  version: 1.0.0
+servers:
+  - url: /admin
+security:
+  - bearerAuth: []
+paths:
+  /routes:
+    get:
+      summary: List routes
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create route
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteRequest'
+      responses:
+        '201':
+          description: Created
+  /routes/{id}:
+    put:
+      summary: Update route
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RouteRequest'
+      responses:
+        '200':
+          description: OK
+    delete:
+      summary: Delete route
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: No Content
+  /policies:
+    get:
+      summary: List policies
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create policy
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PolicyRequest'
+      responses:
+        '201':
+          description: Created
+  /routes/{id}/assignments:
+    get:
+      summary: List policy assignments for route
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Assign policies to route
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AssignmentRequest'
+      responses:
+        '204':
+          description: No Content
+  /ip-rules:
+    get:
+      summary: List IP rules
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create IP rule
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IpRuleRequest'
+      responses:
+        '201':
+          description: Created
+  /api-clients:
+    get:
+      summary: List API clients
+      responses:
+        '200':
+          description: OK
+    post:
+      summary: Create API client
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ApiClientRequest'
+      responses:
+        '201':
+          description: Created
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    RouteRequest:
+      type: object
+      required: [name, pathPattern, upstreamUrl]
+      properties:
+        name:
+          type: string
+        pathPattern:
+          type: string
+        upstreamUrl:
+          type: string
+        methods:
+          type: string
+        enabled:
+          type: boolean
+    PolicyRequest:
+      type: object
+      required: [name, type, configJson]
+      properties:
+        name:
+          type: string
+        type:
+          type: string
+        configJson:
+          type: string
+        enabled:
+          type: boolean
+    AssignmentRequest:
+      type: object
+      properties:
+        assignments:
+          type: array
+          items:
+            type: object
+            required: [policyId, orderIndex, enabled]
+            properties:
+              policyId:
+                type: string
+                format: uuid
+              orderIndex:
+                type: integer
+              enabled:
+                type: boolean
+    IpRuleRequest:
+      type: object
+      required: [scope, cidr, action]
+      properties:
+        scope:
+          type: string
+        cidr:
+          type: string
+        action:
+          type: string
+        routeId:
+          type: string
+          format: uuid
+          nullable: true
+        enabled:
+          type: boolean
+    ApiClientRequest:
+      type: object
+      required: [name, apiKeyPlain]
+      properties:
+        name:
+          type: string
+        apiKeyPlain:
+          type: string
+        active:
+          type: boolean

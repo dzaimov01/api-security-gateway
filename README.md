@@ -45,6 +45,7 @@ docker compose up --build
 ## Example Policy Definitions
 
 Create policies with the admin API, then assign them to routes.
+See `config/bootstrap.example.yml` for a full bootstrap dataset.
 
 ```json
 {
@@ -99,6 +100,7 @@ Create policies with the admin API, then assign them to routes.
 
 - `docs/ARCHITECTURE.md`
 - `docs/ADMIN_API.md`
+- `docs/admin-openapi.yaml`
 - `docs/THREAT_MODEL.md`
 - `docs/POLICY_ENGINE.md`
 - `docs/DEPLOYMENT.md`
